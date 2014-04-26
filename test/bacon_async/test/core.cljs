@@ -10,9 +10,29 @@
       (b/later 1 "hipsta!")
       "hipsta!")))
 
-
 (defasync sequentially
   (testing "it should send events and end"
     (expect-stream-events
       (b/sequentially 1 ["hipsta 1" "hipsta 2"])
       "hipsta 1" "hipsta 2")))
+
+(defasync from-array
+  (testing "it should send all events and end immediately"
+    (expect-stream-events
+      (b/from-array ["I've" "got" "a" "lovely"])
+      "I've" "got" "a" "lovely")))
+
+(defasync merging
+  (testing "it should be mergable"
+    (expect-stream-events
+      (-> (b/from-array [1 2 3 4])
+          (b/merge (b/from-array [5 6 7 8])))
+      5 6 7 8 1 2 3 4)))
+
+(defasync property
+  (testing "delivers current value and changes"
+    (expect-property-events
+      (-> (b/later 5 "b")
+          (b/merge (b/from-array ["a"]))
+          (b/to-property))
+      "a" "b")))
