@@ -72,7 +72,27 @@
     (eventstream out)))
 
 (defn map [obs f]
-  (eventstream (async/map #(e/map-event % f) [(:src obs)])))
+  (eventstream (async/map #(e/map-event % f)
+                          [(:src obs)])))
 
 (defn filter [obs pred]
-  (eventstream (async/filter< #(or (:end? %) (pred (:value %))) (:src obs))))
+  (eventstream (async/filter< #(or (:end? %) (pred (:value %)))
+                              (:src obs))))
+
+(defn take [obs n]
+  (let [out (chan)]
+    (go
+      (dotimes [i n]
+        (>! out (<! (:src obs))))
+      (>! out (e/end)))
+    (eventstream out)))
+
+(defn take-while [obs pred]
+  (let [out (chan)]
+    (go
+      (loop [event (<! (:src obs))]
+        (when (or (:end? event) (pred (:value event)))
+          (>! out event)
+          (recur (<! (:src obs))))
+        (>! out (e/end))))
+    (eventstream out)))

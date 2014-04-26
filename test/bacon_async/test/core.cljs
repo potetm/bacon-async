@@ -58,3 +58,17 @@
           (b/filter even?)
           (b/map inc))
       3 5)))
+
+(defasync taking-n
+  (testing "it takes the first n values"
+    (expect-stream-events
+      (-> (b/from-array [1 2 3 4 5])
+          (b/take 3))
+      1 2 3)))
+
+(defasync taking-while
+  (testing "it should take while"
+    (expect-stream-events
+      (-> (b/from-array [1 2 3 4])
+          (b/take-while (partial > 3)))
+      1 2)))
