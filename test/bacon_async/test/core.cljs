@@ -36,3 +36,25 @@
           (b/merge (b/from-array ["a"]))
           (b/to-property))
       "a" "b")))
+
+(defasync mapping
+  (testing "it should map values"
+    (expect-stream-events
+      (-> (b/from-array [1 2 3])
+          (b/map inc))
+      2 3 4)))
+
+(defasync filtering
+  (testing "it should filter values"
+    (expect-stream-events
+      (-> (b/from-array ["a" "b" "c"])
+          (b/filter (partial not= "c")))
+      "a" "b")))
+
+(defasync filter-and-map
+  (testing "it should be composable"
+    (expect-stream-events
+      (-> (b/from-array [1 2 3 4])
+          (b/filter even?)
+          (b/map inc))
+      3 5)))

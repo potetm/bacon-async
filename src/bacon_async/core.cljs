@@ -4,6 +4,9 @@
   (:require [bacon-async.event :as e]
             [cljs.core.async :refer [>! <! alts! chan sliding-buffer put! timeout tap mult close!] :as async]))
 
+(defprotocol ISubscribe
+  (-subscribe! [obs f]))
+
 (defn- subscribe-loop [src f]
   (let [t (tap (mult src) (chan))]
     (go
@@ -11,9 +14,6 @@
         (f event)
         (when-not (:end? event)
           (recur (<! t)))))))
-
-(defprotocol ISubscribe
-  (-subscribe! [obs f]))
 
 (defrecord EventStream [src]
   ISubscribe
@@ -70,3 +70,9 @@
           (>! out event))
         (recur (<! in))))
     (eventstream out)))
+
+(defn map [obs f]
+  (eventstream (async/map #(e/map-event % f) [(:src obs)])))
+
+(defn filter [obs pred]
+  (eventstream (async/filter< #(or (:end? %) (pred (:value %))) (:src obs))))
