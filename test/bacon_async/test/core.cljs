@@ -72,3 +72,10 @@
       (-> (b/from-array [1 2 3 4])
           (b/take-while (partial > 3)))
       1 2)))
+
+(defasync repeating
+  (testing "it repeats"
+    (expect-stream-events
+      (-> (b/repeatedly 1 [1 2 3])
+          (b/take 5))
+      1 2 3 1 2)))

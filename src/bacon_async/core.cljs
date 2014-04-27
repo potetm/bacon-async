@@ -2,7 +2,7 @@
   (:refer-clojure :exclude [filter map merge repeatedly take take-while])
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [bacon-async.event :as e]
-            [cljs.core.async :refer [>! <! alts! chan sliding-buffer put! timeout tap mult close!] :as async]))
+            [cljs.core.async :refer [>! <! alts! chan timeout tap mult close!] :as async]))
 
 (defprotocol ISubscribe
   (-subscribe! [obs f]))
@@ -82,7 +82,7 @@
 (defn take [obs n]
   (let [out (chan)]
     (go
-      (dotimes [i n]
+      (dotimes [_ n]
         (>! out (<! (:src obs))))
       (>! out (e/end)))
     (eventstream out)))
@@ -95,4 +95,12 @@
           (>! out event)
           (recur (<! (:src obs))))
         (>! out (e/end))))
+    (eventstream out)))
+
+(defn repeatedly [delay values]
+  (let [out (chan)]
+    (go
+      (doseq [v (cycle values)]
+        (<! (timeout delay))
+        (>! out (e/next v))))
     (eventstream out)))
