@@ -23,7 +23,7 @@
 (defrecord EventStream [src]
   ISubscribe
   (-subscribe! [_ f]
-    (let [t (tap (mult src) (chan))]
+    (let [t (tap src (chan))]
       (go
         (loop [event (<! t)]
           (f event)
@@ -31,7 +31,7 @@
             (recur (<! t))))))))
 
 (defn eventstream [src]
-  (->EventStream src))
+  (->EventStream (mult src)))
 
 (defrecord Property [src current-val-atom]
   ISubscribe
@@ -39,7 +39,7 @@
     (let [current-val @current-val-atom]
       (when-not (= ::none current-val)
         (f (e/initial current-val)))
-      (let [t (tap (mult src) (chan))]
+      (let [t (tap src (chan))]
         (go
           (loop [event (<! t)]
             (when (:has-value? event)
@@ -58,7 +58,7 @@
       (eventstream out))))
 
 (defn property [src]
-  (->Property src (atom ::none)))
+  (->Property (mult src) (atom ::none)))
 
 (defn to-property [obs]
   (property (:src obs)))
