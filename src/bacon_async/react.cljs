@@ -19,7 +19,7 @@
 (defn render-component [obs initial-markup container]
   (let [c (react obs initial-markup)
         comp (js/React.renderComponent (c) container)]
-    (b/on-value! obs #(.setProps comp))))
+    (b/on-value! obs #(.forceUpdate comp))))
 
 (defn ^:export run []
   (-> (b/sequentially 1000 [[:div "Hello, World!"]

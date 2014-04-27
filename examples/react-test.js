@@ -56786,7 +56786,7 @@ bacon_async.react.render_component = function render_component(obs, initial_mark
   var comp = React.renderComponent(c.call(null), container);
   return bacon_async.core.on_value_BANG_.call(null, obs, function(c, comp) {
     return function() {
-      return comp.setProps();
+      return comp.forceUpdate();
     };
   }(c, comp));
 };
