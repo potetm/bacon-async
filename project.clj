@@ -19,6 +19,12 @@
                 :compiler {:output-to "target/unit-test.js"
                            :preamble ["bacon-async/es5-shim.js" "bacon-async/react.js"]
                            :optimizations :whitespace
+                           :pretty-print true}}
+               {:id "react-test"
+                :source-paths ["src"]
+                :compiler {:output-to "examples/react-test.js"
+                           :preamble ["bacon-async/react.js"]
+                           :optimizations :whitespace
                            :pretty-print true}}]
               :test-commands {"unit-test" ["phantomjs" :runner
                                            "target/unit-test.js"]}})

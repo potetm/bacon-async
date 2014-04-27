@@ -86,6 +86,15 @@
       (b/constant "wat")
       "wat")))
 
+(defasync on-value!
+  (testing "it should receive values"
+    (let [values (atom [])]
+      (-> (b/sequentially 1 ["looza!" "foo!"])
+          (b/on-value! #(swap! values conj %)))
+      (later 25
+             (is (= @values ["looza!" "foo!"]))
+             (done)))))
+
 #_(defasync changes
   (testing "that changes pushes only changes"
     (expect-stream-events

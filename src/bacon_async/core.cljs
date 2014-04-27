@@ -13,6 +13,13 @@
 (defn subscribe! [obs f]
   (-subscribe! obs f))
 
+(defn on-value! [es f]
+  (subscribe!
+    es
+    (fn [event]
+      (when (:has-value? event)
+        (f (:value event))))))
+
 (defrecord EventStream [src]
   ISubscribe
   (-subscribe! [_ f]
@@ -42,7 +49,13 @@
               (recur (<! t))))))))
   IProperty
   (-changes [prop]
-    (eventstream src)))
+    (let [out (chan)]
+      (go
+        (subscribe! prop
+                    (fn [event]
+                      (when-not (:initial? event)
+                        (>! out event)))))
+      (eventstream out))))
 
 (defn property [src]
   (->Property src (atom ::none)))
