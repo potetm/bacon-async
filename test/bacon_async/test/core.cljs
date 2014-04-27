@@ -79,3 +79,18 @@
       (-> (b/repeatedly 1 [1 2 3])
           (b/take 5))
       1 2 3 1 2)))
+
+(defasync constant
+  (testing "that it's constant"
+    (expect-property-events
+      (b/constant "wat")
+      "wat")))
+
+#_(defasync changes
+  (testing "that changes pushes only changes"
+    (expect-stream-events
+      (-> (b/sequentially 1 [2 3])
+          (b/merge (b/constant 1))
+          b/to-property
+          b/changes)
+      2 3)))

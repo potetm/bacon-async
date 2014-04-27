@@ -7,18 +7,21 @@
 (defprotocol ISubscribe
   (-subscribe! [obs f]))
 
-(defn- subscribe-loop [src f]
-  (let [t (tap (mult src) (chan))]
-    (go
-      (loop [event (<! t)]
-        (f event)
-        (when-not (:end? event)
-          (recur (<! t)))))))
+(defprotocol IProperty
+  (-changes [prop]))
+
+(defn subscribe! [obs f]
+  (-subscribe! obs f))
 
 (defrecord EventStream [src]
   ISubscribe
   (-subscribe! [_ f]
-    (subscribe-loop src f)))
+    (let [t (tap (mult src) (chan))]
+      (go
+        (loop [event (<! t)]
+          (f event)
+          (when-not (:end? event)
+            (recur (<! t))))))))
 
 (defn eventstream [src]
   (->EventStream src))
@@ -29,13 +32,26 @@
     (let [current-val @current-val-atom]
       (when-not (= ::none current-val)
         (f (e/initial current-val)))
-      (subscribe-loop src f))))
+      (let [t (tap (mult src) (chan))]
+        (go
+          (loop [event (<! t)]
+            (when (:has-value? event)
+              (reset! current-val-atom (:value event)))
+            (f event)
+            (when-not (:end? event)
+              (recur (<! t))))))))
+  IProperty
+  (-changes [prop]
+    (eventstream src)))
+
+(defn property [src]
+  (->Property src (atom ::none)))
 
 (defn to-property [obs]
-  (->Property (:src obs) (atom ::none)))
+  (property (:src obs)))
 
-(defn subscribe! [obs f]
-  (-subscribe! obs f))
+(defn changes [prop]
+  (-changes prop))
 
 (defn sequentially [delay vals]
   (let [out (chan)]
@@ -56,6 +72,21 @@
         (>! out (e/next v)))
       (>! out (e/end)))
     (eventstream out)))
+
+(defn repeatedly [delay values]
+  (let [out (chan)]
+    (go
+      (doseq [v (cycle values)]
+        (<! (timeout delay))
+        (>! out (e/next v))))
+    (eventstream out)))
+
+(defn constant [val]
+  (let [out (chan)]
+    (go
+      (>! out (e/initial val))
+      (>! out (e/end)))
+    (property out)))
 
 (defn merge [left right]
   (let [end? (atom false)
@@ -95,12 +126,4 @@
           (>! out event)
           (recur (<! (:src obs))))
         (>! out (e/end))))
-    (eventstream out)))
-
-(defn repeatedly [delay values]
-  (let [out (chan)]
-    (go
-      (doseq [v (cycle values)]
-        (<! (timeout delay))
-        (>! out (e/next v))))
     (eventstream out)))
