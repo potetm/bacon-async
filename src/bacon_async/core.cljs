@@ -20,10 +20,10 @@
       (when (:has-value? event)
         (f (:value event))))))
 
-(defrecord EventStream [src]
+(defrecord EventStream [src -mult]
   ISubscribe
   (-subscribe! [_ f]
-    (let [t (tap src (chan))]
+    (let [t (tap -mult (chan))]
       (go
         (loop [event (<! t)]
           (f event)
@@ -31,15 +31,15 @@
             (recur (<! t))))))))
 
 (defn eventstream [src]
-  (->EventStream (mult src)))
+  (->EventStream src (mult src)))
 
-(defrecord Property [src current-val-atom]
+(defrecord Property [src -mult current-val-atom]
   ISubscribe
   (-subscribe! [_ f]
     (let [current-val @current-val-atom]
       (when-not (= ::none current-val)
         (f (e/initial current-val)))
-      (let [t (tap src (chan))]
+      (let [t (tap -mult (chan))]
         (go
           (loop [event (<! t)]
             (when (:has-value? event)
@@ -58,10 +58,13 @@
       (eventstream out))))
 
 (defn property [src]
-  (->Property (mult src) (atom ::none)))
+  (->Property src (mult src) (atom ::none)))
+
+(defn tap-src [obs]
+  (tap (:-mult obs) (chan)))
 
 (defn to-property [obs]
-  (property (:src obs)))
+  (property (tap-src obs)))
 
 (defn changes [prop]
   (-changes prop))
@@ -103,7 +106,7 @@
 
 (defn merge [left right]
   (let [end? (atom false)
-        in (async/merge [(:src left) (:src right)])
+        in (async/merge [(tap-src left) (tap-src right)])
         out (chan)]
     (go
       (loop [event (<! in)]
@@ -117,26 +120,28 @@
 
 (defn map [obs f]
   (eventstream (async/map #(e/map-event % f)
-                          [(:src obs)])))
+                          [(tap-src obs)])))
 
 (defn filter [obs pred]
   (eventstream (async/filter< #(or (:end? %) (pred (:value %)))
-                              (:src obs))))
+                              (tap-src obs))))
 
 (defn take [obs n]
-  (let [out (chan)]
+  (let [out (chan)
+        src (tap-src obs)]
     (go
       (dotimes [_ n]
-        (>! out (<! (:src obs))))
+        (>! out (<! src)))
       (>! out (e/end)))
     (eventstream out)))
 
 (defn take-while [obs pred]
-  (let [out (chan)]
+  (let [out (chan)
+        src (tap-src obs)]
     (go
-      (loop [event (<! (:src obs))]
+      (loop [event (<! src)]
         (when (or (:end? event) (pred (:value event)))
           (>! out event)
-          (recur (<! (:src obs))))
+          (recur (<! src)))
         (>! out (e/end))))
     (eventstream out)))
