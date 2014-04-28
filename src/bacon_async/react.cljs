@@ -28,11 +28,13 @@
 
 (defn init-react-test []
   (let [in (b/bus)
+        val (b/bus)
         html (-> in
                  (b/map (partial + 100))
                  (b/map (fn [i]
-                          [:div (str "Testing " i)]))
-                 (b/merge (b/constant [:div])))
+                          [:div {:on-click #(b/push! val "testing!")} (str "Testing " i)]))
+                 (b/merge (b/constant [:div]))
+                 (b/merge (b/map val (fn [v] [:div (str "Forget yo " v)]))))
         elem (react-elem html)]
     (component
       {:elem elem

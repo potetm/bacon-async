@@ -57384,20 +57384,20 @@ bacon_async.react.Component.prototype.cljs$core$ILookup$_lookup$arity$2 = functi
   var this__4067__auto____$1 = this;
   return cljs.core._lookup.call(null, this__4067__auto____$1, k__4068__auto__, null);
 };
-bacon_async.react.Component.prototype.cljs$core$ILookup$_lookup$arity$3 = function(this__4069__auto__, k34891, else__4070__auto__) {
+bacon_async.react.Component.prototype.cljs$core$ILookup$_lookup$arity$3 = function(this__4069__auto__, k10284, else__4070__auto__) {
   var self__ = this;
   var this__4069__auto____$1 = this;
-  if (cljs.core.keyword_identical_QMARK_.call(null, k34891, new cljs.core.Keyword(null, "elem", "elem", 1017020161))) {
+  if (cljs.core.keyword_identical_QMARK_.call(null, k10284, new cljs.core.Keyword(null, "elem", "elem", 1017020161))) {
     return self__.elem;
   } else {
-    if (cljs.core.keyword_identical_QMARK_.call(null, k34891, new cljs.core.Keyword(null, "in", "in", 1013907607))) {
+    if (cljs.core.keyword_identical_QMARK_.call(null, k10284, new cljs.core.Keyword(null, "in", "in", 1013907607))) {
       return self__.in$;
     } else {
-      if (cljs.core.keyword_identical_QMARK_.call(null, k34891, new cljs.core.Keyword(null, "out", "out", 1014014656))) {
+      if (cljs.core.keyword_identical_QMARK_.call(null, k10284, new cljs.core.Keyword(null, "out", "out", 1014014656))) {
         return self__.out;
       } else {
         if (new cljs.core.Keyword(null, "else", "else", 1017020587)) {
-          return cljs.core.get.call(null, self__.__extmap, k34891, else__4070__auto__);
+          return cljs.core.get.call(null, self__.__extmap, k10284, else__4070__auto__);
         } else {
           return null;
         }
@@ -57468,21 +57468,21 @@ bacon_async.react.Component.prototype.cljs$core$IMap$_dissoc$arity$2 = function(
     return new bacon_async.react.Component(self__.elem, self__.in$, self__.out, self__.__meta, cljs.core.not_empty.call(null, cljs.core.dissoc.call(null, self__.__extmap, k__4077__auto__)), null);
   }
 };
-bacon_async.react.Component.prototype.cljs$core$IAssociative$_assoc$arity$3 = function(this__4074__auto__, k__4075__auto__, G__34890) {
+bacon_async.react.Component.prototype.cljs$core$IAssociative$_assoc$arity$3 = function(this__4074__auto__, k__4075__auto__, G__10283) {
   var self__ = this;
   var this__4074__auto____$1 = this;
-  var pred__34893 = cljs.core.keyword_identical_QMARK_;
-  var expr__34894 = k__4075__auto__;
-  if (cljs.core.truth_(pred__34893.call(null, new cljs.core.Keyword(null, "elem", "elem", 1017020161), expr__34894))) {
-    return new bacon_async.react.Component(G__34890, self__.in$, self__.out, self__.__meta, self__.__extmap, null);
+  var pred__10286 = cljs.core.keyword_identical_QMARK_;
+  var expr__10287 = k__4075__auto__;
+  if (cljs.core.truth_(pred__10286.call(null, new cljs.core.Keyword(null, "elem", "elem", 1017020161), expr__10287))) {
+    return new bacon_async.react.Component(G__10283, self__.in$, self__.out, self__.__meta, self__.__extmap, null);
   } else {
-    if (cljs.core.truth_(pred__34893.call(null, new cljs.core.Keyword(null, "in", "in", 1013907607), expr__34894))) {
-      return new bacon_async.react.Component(self__.elem, G__34890, self__.out, self__.__meta, self__.__extmap, null);
+    if (cljs.core.truth_(pred__10286.call(null, new cljs.core.Keyword(null, "in", "in", 1013907607), expr__10287))) {
+      return new bacon_async.react.Component(self__.elem, G__10283, self__.out, self__.__meta, self__.__extmap, null);
     } else {
-      if (cljs.core.truth_(pred__34893.call(null, new cljs.core.Keyword(null, "out", "out", 1014014656), expr__34894))) {
-        return new bacon_async.react.Component(self__.elem, self__.in$, G__34890, self__.__meta, self__.__extmap, null);
+      if (cljs.core.truth_(pred__10286.call(null, new cljs.core.Keyword(null, "out", "out", 1014014656), expr__10287))) {
+        return new bacon_async.react.Component(self__.elem, self__.in$, G__10283, self__.__meta, self__.__extmap, null);
       } else {
-        return new bacon_async.react.Component(self__.elem, self__.in$, self__.out, self__.__meta, cljs.core.assoc.call(null, self__.__extmap, k__4075__auto__, G__34890), null);
+        return new bacon_async.react.Component(self__.elem, self__.in$, self__.out, self__.__meta, cljs.core.assoc.call(null, self__.__extmap, k__4075__auto__, G__10283), null);
       }
     }
   }
@@ -57493,10 +57493,10 @@ bacon_async.react.Component.prototype.cljs$core$ISeqable$_seq$arity$1 = function
   return cljs.core.seq.call(null, cljs.core.concat.call(null, new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "elem", "elem", 1017020161), self__.elem], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "in", "in", 1013907607), self__.in$], null), new cljs.core.PersistentVector(null, 2, 
   5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "out", "out", 1014014656), self__.out], null)], null), self__.__extmap));
 };
-bacon_async.react.Component.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = function(this__4066__auto__, G__34890) {
+bacon_async.react.Component.prototype.cljs$core$IWithMeta$_with_meta$arity$2 = function(this__4066__auto__, G__10283) {
   var self__ = this;
   var this__4066__auto____$1 = this;
-  return new bacon_async.react.Component(self__.elem, self__.in$, self__.out, G__34890, self__.__extmap, self__.__hash);
+  return new bacon_async.react.Component(self__.elem, self__.in$, self__.out, G__10283, self__.__extmap, self__.__hash);
 };
 bacon_async.react.Component.prototype.cljs$core$ICollection$_conj$arity$2 = function(this__4072__auto__, entry__4073__auto__) {
   var self__ = this;
@@ -57517,8 +57517,8 @@ bacon_async.react.Component.cljs$lang$ctorPrWriter = function(this__4101__auto__
 bacon_async.react.__GT_Component = function __GT_Component(elem, in$, out) {
   return new bacon_async.react.Component(elem, in$, out);
 };
-bacon_async.react.map__GT_Component = function map__GT_Component(G__34892) {
-  return new bacon_async.react.Component((new cljs.core.Keyword(null, "elem", "elem", 1017020161)).cljs$core$IFn$_invoke$arity$1(G__34892), (new cljs.core.Keyword(null, "in", "in", 1013907607)).cljs$core$IFn$_invoke$arity$1(G__34892), (new cljs.core.Keyword(null, "out", "out", 1014014656)).cljs$core$IFn$_invoke$arity$1(G__34892), null, cljs.core.dissoc.call(null, G__34892, new cljs.core.Keyword(null, "elem", "elem", 1017020161), new cljs.core.Keyword(null, "in", "in", 1013907607), new cljs.core.Keyword(null, 
+bacon_async.react.map__GT_Component = function map__GT_Component(G__10285) {
+  return new bacon_async.react.Component((new cljs.core.Keyword(null, "elem", "elem", 1017020161)).cljs$core$IFn$_invoke$arity$1(G__10285), (new cljs.core.Keyword(null, "in", "in", 1013907607)).cljs$core$IFn$_invoke$arity$1(G__10285), (new cljs.core.Keyword(null, "out", "out", 1014014656)).cljs$core$IFn$_invoke$arity$1(G__10285), null, cljs.core.dissoc.call(null, G__10285, new cljs.core.Keyword(null, "elem", "elem", 1017020161), new cljs.core.Keyword(null, "in", "in", 1013907607), new cljs.core.Keyword(null, 
   "out", "out", 1014014656)));
 };
 bacon_async.react.component = bacon_async.react.map__GT_Component;
@@ -57543,11 +57543,20 @@ bacon_async.react.react_elem = function react_elem(obs) {
 };
 bacon_async.react.init_react_test = function init_react_test() {
   var in$ = bacon_async.core.bus.call(null);
-  var html = bacon_async.core.merge.call(null, bacon_async.core.map.call(null, bacon_async.core.map.call(null, in$, cljs.core.partial.call(null, cljs.core._PLUS_, 100)), function(in$) {
+  var val = bacon_async.core.bus.call(null);
+  var html = bacon_async.core.merge.call(null, bacon_async.core.merge.call(null, bacon_async.core.map.call(null, bacon_async.core.map.call(null, in$, cljs.core.partial.call(null, cljs.core._PLUS_, 100)), function(in$, val) {
     return function(i) {
-      return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1014003715), [cljs.core.str("Testing "), cljs.core.str(i)].join("")], null);
+      return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1014003715), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "on-click", "on-click", 1416542092), function(in$, val) {
+        return function() {
+          return bacon_async.core.push_BANG_.call(null, val, "testing!");
+        };
+      }(in$, val)], null), [cljs.core.str("Testing "), cljs.core.str(i)].join("")], null);
     };
-  }(in$)), bacon_async.core.constant.call(null, new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1014003715)], null)));
+  }(in$, val)), bacon_async.core.constant.call(null, new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1014003715)], null))), bacon_async.core.map.call(null, val, function(in$, val) {
+    return function(v) {
+      return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1014003715), [cljs.core.str("Forget yo "), cljs.core.str(v)].join("")], null);
+    };
+  }(in$, val)));
   var elem = bacon_async.react.react_elem.call(null, html);
   return bacon_async.react.component.call(null, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "elem", "elem", 1017020161), elem, new cljs.core.Keyword(null, "in", "in", 1013907607), in$], null));
 };
