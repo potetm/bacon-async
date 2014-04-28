@@ -27,12 +27,16 @@
     (c)))
 
 (defn init-react-test []
-  (let [in (-> (b/sequentially 1000 [[:div "Hello, World!"]
-                                     [:div "The world has changed!"]])
-               (b/merge (b/constant [:div])))
-        elem (react-elem in)]
+  (let [in (b/bus)
+        html (-> in
+                 (b/map (partial + 100))
+                 (b/map (fn [i]
+                          [:div (str "Testing " i)]))
+                 (b/merge (b/constant [:div])))
+        elem (react-elem html)]
     (component
-      {:elem elem})))
+      {:elem elem
+       :in in})))
 
 (defn ^:export run []
   (let [react-test (init-react-test)
@@ -42,4 +46,6 @@
                [:div (str "YO " i)
                 (:elem react-test)]))
         my-component (react-elem in)]
+    (->> (b/sequentially 1000 [1 2 3 4 5])
+         (b/plug! (:in react-test)))
     (js/React.renderComponent my-component (.-body js/document))))

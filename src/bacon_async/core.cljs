@@ -2,13 +2,19 @@
   (:refer-clojure :exclude [filter map merge repeatedly take take-while])
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [bacon-async.event :as e]
-            [cljs.core.async :refer [>! <! alts! chan timeout tap mult close!] :as async]))
+            [cljs.core.async :refer [>! <! alts! chan timeout tap mult close! pipe] :as async]))
 
 (defprotocol ISubscribe
   (-subscribe! [obs f]))
 
 (defprotocol IProperty
   (-changes [prop]))
+
+(defprotocol IBus
+  (-plug! [bus obs])
+  (-push! [bus val])
+  (-error! [bus msg])
+  (-end! [bus]))
 
 (defn subscribe! [obs f]
   (-subscribe! obs f))
@@ -20,15 +26,18 @@
       (when (:has-value? event)
         (f (:value event))))))
 
+(defn- event-stream-subscribe [-mult f]
+  (let [t (tap -mult (chan))]
+    (go
+      (loop [event (<! t)]
+        (f event)
+        (when-not (:end? event)
+          (recur (<! t)))))))
+
 (defrecord EventStream [src -mult]
   ISubscribe
   (-subscribe! [_ f]
-    (let [t (tap -mult (chan))]
-      (go
-        (loop [event (<! t)]
-          (f event)
-          (when-not (:end? event)
-            (recur (<! t))))))))
+    (event-stream-subscribe -mult f)))
 
 (defn eventstream [src]
   (->EventStream src (mult src)))
@@ -62,6 +71,36 @@
 
 (defn tap-src [obs]
   (tap (:-mult obs) (chan)))
+
+(defrecord Bus [src -mult]
+  ISubscribe
+  (-subscribe! [_ f]
+    (event-stream-subscribe -mult f))
+  IBus
+  (-plug! [bus obs]
+    (pipe (tap-src obs) (:src bus)))
+  (-push! [bus val]
+    (go (>! (:src bus) (e/next val))))
+  (-error! [bus msg]
+    (go (>! (:src bus) (e/error))))
+  (-end! [bus]
+    (go (>! (:src bus) (e/end)))))
+
+(defn bus []
+  (let [c (chan)]
+    (->Bus c (mult c))))
+
+(defn plug! [bus obs]
+  (-plug! bus obs))
+
+(defn push! [bus val]
+  (-push! bus val))
+
+(defn error! [bus msg]
+  (-error! bus msg))
+
+(defn end! [bus]
+  (-end! bus))
 
 (defn to-property [obs]
   (property (tap-src obs)))
